@@ -3,7 +3,7 @@ from aiohttp import web
 
 BOT_TOKEN = "9193836271:AAGbBJa_wZfBBbdTENcLsGAOjtZqTBmONeo"
 OPENROUTER_API_KEY = __import__("os").environ.get("OPENROUTER_API_KEY", "")
-WEBAPP_URL = "https://" + "regsay." + "github.io" + "/RolePlayBot/?v=6"
+WEBAPP_URL = "https://" + "regsay." + "github.io" + "/RolePlayBot/?v=6?v=6"
 
 MODEL_NAME = "nousresearch/hermes-3-llama-3.1-405b:free"
 VIP_PRICE_STARS = 100
