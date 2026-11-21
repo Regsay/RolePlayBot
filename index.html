@@ -75,13 +75,14 @@ textarea{height:85px;resize:none}
 <div class="nav-i" onclick="nav('vip',this)"><span>⭐️</span>VIP</div></div>
 <script>
 const tg=window.Telegram.WebApp;tg.expand();tg.ready();
-let API="https://roleplaybot.onrender.com";
+const API=atob("aHR0cHM6Ly9yb2xlcGxheWJvdC5vbnJlbmRlci5jb20=");
+const PURL=atob("aHR0cHM6Ly9pbWFnZS5wb2xsaW5hdGlvbnMuYWkvcHJvbXB0Lw==");
 const uid=tg.initDataUnsafe?.user?.id||12345;
 const H={"Content-Type":"application/json"};
-function pic(p,s){return ["https://","image.","pollinations.ai","/prompt/"].join("")+encodeURIComponent(p)+`?width=400&height=550&seed=${s}&nologo=true`;}
+function pic(p,s){return PURL+encodeURIComponent(p)+`?width=400&height=550&seed=${s}&nologo=true`;}
 let allChars={
 "makima":{"name":"Макима","tag":"Домина","img":pic("1girl makima chainsaw man red braided hair yellow eyes white shirt seductive masterpiece",101),"prompt":"Властная и загадочная. Считает тебя своим верным псом и любит полный контроль."},
-"zerotwo":{"name":"Зеро Ту (02)","tag":"Милая","img":pic("1girl zero two darling in the franxx pink hair red horns seductive smile masterpiece",102),"prompt":"Дерзкая и страстная. Называет тебя «Милый» и обожает близость."},
+"zerotwo":{"name":"Зеро Ту (02)","tag":"Милая","img":pic("1girl zero two darling in the franxx pink hair red horns seductive smile masterpiece",102),"prompt":"Дерзкая и страстная. Называет тебя Милый и обожает близость."},
 "2b":{"name":"YoRHa 2B","tag":"Игры","img":pic("1girl 2b nier automata white bob hair black blindfold gothic dress masterpiece",103),"prompt":"Холодная снаружи, но невероятно страстная наедине с тобой."},
 "esdeath":{"name":"Генерал Эсдес","tag":"Домина","img":pic("1girl esdeath akame ga kill long blue hair general hat seductive masterpiece",104),"prompt":"Безумно влюблена в тебя, готова на всё ради твоей покорности."},
 "asuka":{"name":"Аска Лэнгли","tag":"Милая","img":pic("1girl asuka langley red hair twin tails blue eyes tsundere blushing masterpiece",105),"prompt":"Классическая цундере — дерзит, но тайно сходит по тебе с ума."},
@@ -103,9 +104,6 @@ g.innerHTML+=`<div class="card"><span class="tag">${c.tag}</span><img src="${c.i
 renderGrid('all');
 async function init(){
 try{
-const ghUrl=["https://","api.","github.com","/repos/Regsay/RolePlayBot"].join("");
-const gr=await fetch(ghUrl);
-const gd=await gr.json();API=gd.description.trim();
 const r=await fetch(`${API}/api/init?user_id=${uid}`);const d=await r.json();
 document.getElementById('bal').innerText=d.user.is_vip?"👑 VIP":`⚡️ ${d.user.msgs_left}`;
 document.getElementById('ch-name').innerText=d.user.char_name;
@@ -113,7 +111,7 @@ document.getElementById('ch-img').src=d.user.char_img;
 document.getElementById('ch-aff').innerText=`❤️ Симпатия: ${d.user.affection}%`;
 document.getElementById('msgs').innerHTML='';
 d.messages.forEach(m=>addBubble(m.role,m.content,m.img));
-}catch(e){document.getElementById('bal').innerText="Офлайн";}
+}catch(e){console.log(e);}
 }
 function filterTag(t,el){document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderGrid(t);}
 function nav(s,el){
@@ -127,7 +125,7 @@ const c=allChars[id];
 document.getElementById('ch-name').innerText=c.name;document.getElementById('ch-img').src=c.img;
 document.getElementById('ch-aff').innerText="❤️ Симпатия: 15%";document.getElementById('msgs').innerHTML='';
 addBubble('assistant',`*смотрит прямо тебе в глаза* Привет... Я ${c.name}. О чём пофантазируем?`);nav('chat');
-if(API)fetch(`${API}/api/select`,{method:"POST",headers:H,body:JSON.stringify({user_id:uid,char_id:id})});
+fetch(`${API}/api/select`,{method:"POST",headers:H,body:JSON.stringify({user_id:uid,char_id:id})});
 }
 async function sendMsg(){
 const inp=document.getElementById('inp');const txt=inp.value.trim();if(!txt)return;
@@ -135,11 +133,11 @@ inp.value='';addBubble('user',txt);
 try{
 const r=await fetch(`${API}/api/chat`,{method:"POST",headers:H,body:JSON.stringify({user_id:uid,text:txt})});
 const d=await r.json();
-if(d.error==='no_limit'){tg.showAlert("Бесплатные сообщения кончились! Открой VIP ⭐️");nav('vip',document.querySelectorAll('.nav-i')[3]);return;}
+if(d.error==='no_limit'){tg.showAlert("Бесплатные сообщения кончились! Открой VIP ⭐️");nav('vip',document.querySelectorAll('.nav-i'));return;}
 addBubble('assistant',d.reply);
 document.getElementById('ch-aff').innerText=`❤️ Симпатия: ${d.affection}%`;
 if(!document.getElementById('bal').innerText.includes('VIP'))document.getElementById('bal').innerText=`⚡️ ${d.msgs_left}`;
-}catch(e){addBubble('assistant','*ошибка связи с сервером*');}
+}catch(e){addBubble('assistant','*ошибка связи с сервером — подожди 20 сек, Render просыпается*');}
 }
 async function reqPhoto(){
 addBubble('assistant','*делает горячее фото... 📸*');
