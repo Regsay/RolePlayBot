@@ -33,18 +33,18 @@ const uid=tg.initDataUnsafe?.user?.id||12345;
 const H={"Content-Type":"application/json"};
 const pic=(t,s)=>P+encodeURIComponent(t)+"?width=400&height=550&seed="+s+"&nologo=true";
 const chars={
-makima:{name:"Макима",tag:"Домина",img:pic("1girl makima chainsaw man red braided hair yellow eyes white shirt masterpiece",101),prompt:"Властная и загадочная. Любит полный контроль."},
-zerotwo:{name:"Зеро Ту",tag:"Милая",img:pic("1girl zero two pink hair red horns smile masterpiece",102),prompt:"Дерзкая и страстная. Называет тебя Милый."},
-b2:{name:"YoRHa 2B",tag:"Игры",img:pic("1girl 2b nier automata white bob hair black blindfold dress masterpiece",103),prompt:"Холодная снаружи, страстная наедине."},
-esdeath:{name:"Эсдес",tag:"Домина",img:pic("1girl esdeath long blue hair general hat seductive masterpiece",104),prompt:"Безумно влюблена в тебя, жаждет твоей покорности."},
-asuka:{name:"Аска",tag:"Милая",img:pic("1girl asuka langley red hair twin tails blushing masterpiece",105),prompt:"Цундере — дерзит, но тайно сходит по тебе с ума."},
-hinata:{name:"Хината",tag:"Милая",img:pic("1girl hinata hyuga long dark blue hair lavender eyes blushing masterpiece",106),prompt:"Скромная и нежная, исполнит любое желание."}
+makima:{name:"Макима",tag:"Домина",img:"img/1.jpg",prompt:"Властная и загадочная. Любит полный контроль."},
+zerotwo:{name:"Зеро Ту",tag:"Милая",img:"img/2.jpg",prompt:"Дерзкая и страстная. Называет тебя Милый."},
+b2:{name:"YoRHa 2B",tag:"Игры",img:"img/3.jpg",prompt:"Холодная снаружи, страстная наедине."},
+esdeath:{name:"Эсдес",tag:"Домина",img:"img/4.jpg",prompt:"Безумно влюблена в тебя, жаждет твоей покорности."},
+asuka:{name:"Аска",tag:"Милая",img:"img/5.jpg",prompt:"Цундере — дерзит, но тайно сходит по тебе с ума."},
+hinata:{name:"Хината",tag:"Милая",img:"img/6.jpg",prompt:"Скромная и нежная, исполнит любое желание."}
 };
 const fmt=t=>t.replace(/\*(.*?)\*/g,"<em>*$1*</em>").replace(/\n/g,"<br>");
 function addB(r,t,i){const b=document.getElementById("msgs"),d=document.createElement("div");d.className="msg "+r;d.innerHTML=fmt(t)+(i?`<img src="${i}">`:"");b.appendChild(d);b.scrollTop=b.scrollHeight;}
 function rGrid(tag){const g=document.getElementById("grid");g.innerHTML="";Object.entries(chars).forEach(([id,c])=>{if(tag!=="all"&&c.tag!==tag)return;g.innerHTML+=`<div class="card"><span class="tag">${c.tag}</span><img src="${c.img}"><div class="c-body"><div class="c-name">${c.name}</div><div class="c-desc">${c.prompt}</div><button class="btn" onclick="pick('${id}')">Начать чат 💬</button></div></div>`;});}
 rGrid("all");
-async function init(){try{const r=await fetch(API+"/api/init?user_id="+uid),d=await r.json();document.getElementById("bal").innerText=d.user.is_vip?"👑 VIP":"⚡️ "+d.user.msgs_left;document.getElementById("ch-name").innerText=d.user.char_name;document.getElementById("ch-img").src=d.user.char_img;document.getElementById("ch-aff").innerText="❤️ Симпатия: "+d.user.affection+"%";document.getElementById("msgs").innerHTML="";d.messages.forEach(m=>addB(m.role,m.content,m.img));}catch(e){}}
+async function init(){try{const r=await fetch(API+"/api/init?user_id="+uid),d=await r.json();document.getElementById("bal").innerText=d.user.is_vip?"👑 VIP":"⚡️ "+d.user.msgs_left;document.getElementById("ch-name").innerText=d.user.char_name;document.getElementById("ch-img").src="img/1.jpg";document.getElementById("ch-aff").innerText="❤️ Симпатия: "+d.user.affection+"%";document.getElementById("msgs").innerHTML="";d.messages.forEach(m=>addB(m.role,m.content,m.img));}catch(e){}}
 function fTag(t,el){document.querySelectorAll(".f-btn").forEach(b=>b.classList.remove("active"));el.classList.add("active");rGrid(t);}
 function nav(s,el){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".nav-i").forEach(x=>x.classList.remove("active"));document.getElementById("scr-"+s).classList.add("active");if(el)el.classList.add("active");document.getElementById("bnav").style.display=(s==="chat")?"none":"flex";}
 async function pick(id){const c=chars[id];document.getElementById("ch-name").innerText=c.name;document.getElementById("ch-img").src=c.img;document.getElementById("ch-aff").innerText="❤️ Симпатия: 15%";document.getElementById("msgs").innerHTML="";addB("assistant",`*смотрит в глаза* Привет... Я ${c.name}. О чём пофантазируем?`);nav("chat");fetch(API+"/api/select",{method:"POST",headers:H,body:JSON.stringify({user_id:uid,char_id:id})});}
