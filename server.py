@@ -5,7 +5,7 @@ BOT_TOKEN = "9193836271:AAGbBJa_wZfBBbdTENcLsGAOjtZqTBmONeo"
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 WEBAPP_URL = "https://" + "regsay." + "github.io" + "/RolePlayBot/?v=8"
 
-MODEL_NAME = "nousresearch/hermes-3-llama-3.1-405b:free"
+MODEL_NAME = "openrouter/auto"
 VIP_PRICE_STARS = 100
 FREE_MESSAGES_LIMIT = 15
 
