@@ -75,7 +75,7 @@ textarea{height:85px;resize:none}
 <div class="nav-i" onclick="nav('vip',this)"><span>⭐️</span>VIP</div></div>
 <script>
 const tg=window.Telegram.WebApp;tg.expand();tg.ready();
-const API=atob("aHR0cHM6Ly9lem1pYi03Ny0xMTEtMjQ2LTI4LnJ1bi5waW5nZ3ktZnJlZS5saW5r");
+let API="";
 const uid=tg.initDataUnsafe?.user?.id||12345;
 const H={"Content-Type":"application/json"};
 let allChars={
@@ -102,6 +102,9 @@ g.innerHTML+=`<div class="card"><span class="tag">${c.tag}</span><img src="${c.i
 renderGrid('all');
 async function init(){
 try{
+const gr=await fetch("https://github.com");
+const gd=await gr.json();
+API=gd.description.trim();
 const r=await fetch(`${API}/api/init?user_id=${uid}`);const d=await r.json();
 document.getElementById('bal').innerText=d.user.is_vip?"👑 VIP":`⚡️ ${d.user.msgs_left}`;
 document.getElementById('ch-name').innerText=d.user.char_name;
